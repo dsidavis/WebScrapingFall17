@@ -1,25 +1,40 @@
 # Web Scraping & APIs
 
 ## Workshop Goals:
-1. Become familiar with the essential tools
-2. Understand the elements of Web
-3. Explore strategies.
+2. Understand the role of elements of the Web (HTTP, HTML, JSON, XPath, XML, JavaScript)
+1. Become familiar with the essential tools to work with some of these
+3. Explore strategies for extracting data.
 
 The tools are important; the thought process is more important to learn.
 
 
-+ Scraping & APIs Concepts
+## [Scraping & APIs Concepts](Scraping.md)
     + What is scraping.
     + APIs much preferred over scraping
     + Better ways
     + Rules/Restrictions for scraping.
 
-+ HTML Tables
-+ HTML Links
+## [HTTP Requests](HTTP.md)
 
-## Forms
+
+## HTML Tables
+
+
+## HTML Forms
 + GET
 + POST
+
+
+## HTML Links
+
+
+## JavaScript & Dynamic Content
+
+
+
+
+
+
 
 
 Use higher-level functions for submitting forms.
@@ -45,26 +60,6 @@ Web Developer Tools
 + HTML, XML, JSON
 
 + XPath
-
- Path - sequence of steps
- Each step:  direction/axis, node test, optional condition
-
- Long-hand
-      axis::test[condition]
-  e.g.
-     descendant-or-self::table
-
-  Short hand
-       //table
-      // means descendant-or-self
-
-   @attr - attribute::attr
-   
-    . - current node
-    .. - parent node
-
-   All <td> nodes whose contents contain the character $
-   //td[ contains(., '$') ]
 
 
 ## HTTP Options
