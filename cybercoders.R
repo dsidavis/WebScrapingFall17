@@ -29,8 +29,6 @@ lapply(jobs, function(j) xpathSApply(j, ".//li[@class = 'skill-item']/span[@clas
 skills = lapply(jobs, function(j) xpathSApply(j, ".//li[@class = 'skill-item']//span[@class = 'skill-name']", xmlValue))
 
 
-
-
 # What about the next page?
 
 # <li> containing an <a> with an attribute rel with a value of  'next' and a class that contains next

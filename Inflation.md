@@ -1,19 +1,62 @@
+# Reading HTML Tables
 
-```
+We want to get the CPI (consumer price index) 
+for each month for the last few years.
+The Web page
+https://www.rateinflation.com/consumer-price-index/usa-historical-cpi
+provides this.
+
+We want to read the values into a data frame in R.
+We can cut-and-paste, but we want to automate this.
+
+There are two steps.
+1. First we retrieve the HTML document.
+1. Then we extract the values from the table.
+
+```r
 library(RCurl)
-tt = getURLContent("https://www.rateinflation.com/consumer-price-index/usa-historical-cpi?form=usacpi")
+u = "https://www.rateinflation.com/consumer-price-index/usa-historical-cpi"
+tt = getURLContent(u)
 ```
 
+We'll see what happens in this request by adding the verbose = TRUE option:
+```
+tt = getURLContent(u, verbose = TRUE)
+```
+(There are lots of options for  controlling the request  from within R.
+See
+```
+sort(names(getCurlOptionsConstants()))
+```
+)
+
+
+Now that we have the contents of the document as a string in R,
+we can parse it into something we can work with conveniently.
+We could treat it as a string, but it is better to take
+advantage of the [structure of HTML/XML](HTML.html).
+
+In R, we can use the XML package, or xml2 package,
+to parse the HTML content into a tree.
 ```
 library(XML)
 doc = htmlParse(tt)
+```
+
+Now we can pass the document to the readHTMLTable() to 
+find every table in the document and convert each to a separate data frame:
+```
 tbl = readHTMLTable(doc)
+```
+In this document, there is only one table:
+```
 length(tbl)
 [1] 1
 dim(tbl[[1]])
 [1] 12 14
 ```
 
+Let's look at it:
 ```
 tbl[[1]]
      V1      V2      V3      V4      V5      V6      V7      V8
@@ -45,7 +88,7 @@ tbl[[1]]
 ```
 The column names (Year, jan, feb, ...) are in the first row and we have generic column names
 V1, V2, ...
-So we tell `readHTMLTable()` the table has a header line.
+So we tell `readHTMLTable()` the table has a header line:
 ```
 tbl = readHTMLTable(doc, header = TRUE)
 tbl[[1]]
@@ -76,19 +119,16 @@ tbl[[1]]
 ```
 
 Often `readHTMLTable()` will be able to identify the header itself,
-if the HTML is "properly" structured (with a thead and tbody component).
+if the HTML is "properly" structured (with a <thead> and <tbody> component).
 
 
 Often the page will have multiple tables and we only want one.
-We can use the `which` parameter to specify either the table's number or name (within the
-HTML document via its `id` attribute).
+We can use the `which` parameter to specify either the table's number or name (
+corresponding to the id attribute on the <table> node within the
+HTML document).
 ```
 readHTMLTable(doc, which = 1)
 ```
-
-
-
-
 
 
 # Historical Data - HTML Forms

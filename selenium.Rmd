@@ -1,0 +1,320 @@
+#
+
+```{r}
+library(RSelenium)
+```
+
+We need to ensure we have started the seleniumn server before we try to connecto to it.
+We do this with the shell command
+```{shell}
+java -Dwebdriver.gecko.driver=`pwd`/geckodriver -Dwebdriver.chrome.driver=`pwd`/chromedriver -jar selenium-server-standalone-3.6.0.jar 
+```
+Note that the jar file (java archive) and the two executable drivers for Firefox and Chrome are in
+the current directory. They don't have to be.
+
+Back to R.
+We next establish a connection to that browser instance.
+```{r}
+remDr = remoteDriver(browserName = 'firefox')
+remDr$open()
+```
+We can specify a different browser, port  on which the selenium server is listening,
+the IP address for a different machine on which the server is running, etc.
+
+
+Now we have the browser visit the page in which we are interested using the
+navigate() method.
+```
+u = "https://www.aepenergy.com/"
+remDr$navigate(u)
+```
+
+Before we can remote control the browser to do what we want, we need
+to know what it is that we want to do.
+In our regular browser, let's visit this page.
+We see the `CHECK SERVICE AVAILABILITY` and a `Enter ZIP`
+near the top of the page. 
+<img src="aepenergy1.tiff"/>
+
+We enter a ZIP code, e.g., 45201 and then either hit the return key
+or click on the ENTER link to the right of the textfield.
+
+This changes the page to show an `ENROLL NOW` link.
+<img src="aepenergy2.tiff"/>
+
+We click on this and we get the page we actually want
+with the prices for the different electricity rate deals.
+<img src="aepenergy3.tiff"/>
+
+We want to be able to do this for all of the ZIP codes in Ohio.
+So we want to automate this.
+
+<!-- change = remDr$findElement("id", "region__link--change") -->
+
+We have already navigated the browser to the top-level URL.
+Next we want to insert the ZIP code into the textfield.
+To do this, we need to find the textfield element in the page.
+We can use various different types of selection methods, including XPath.
+We look at the HTML source for the page and identify a pattern to identify this
+element.  In this case, it has a unique id attribute with a value `region__input--zip`.
+So we can get a reference to this live element in the page with
+the `findElement()` method of the remote driver:
+```{r}
+zip = remDr$findElement("id", "region__input--zip")
+```
+Here we tell it which selector method we are using ("id"), and then the selector.
+
+Now that we have the element, we can send it the ZIP code and have it insert them:
+```{r}
+zip$sendKeysToElement(list("45201\n"))
+```
+Note that we put the text in a list. This is necessary.
+<!-- zip$clickElement() -->
+
+
+Now we have to click on the ENTER link.
+We find the element and then click it, i.e. send a click event to it:
+```{r}
+enter = remDr$findElement("id", "region__link--enter")
+enter$clickElement()
+```
+
+This action then brings up the `Enroll Now` option.
+So again, we find that element and send a click event to it:
+```{r}
+enroll = remDr$findElement("xpath", "//a[. = 'Enroll Now']")
+enroll$clickElement()
+```
+
+The browser then retrieves the page with the different electricity rate offers
+and displays this. This is the one we want.
+We can identify the elements we want within this page using 
+the `findElement()` method and any of the selector methods.
+However, we can also just bring the entire page back to R and use our
+the methods we have learned earlier.
+To get the HTML source of the document currently visible  in the browser,
+we use
+```{r}
+txt = remDr$getPageSource()
+```
+This is a list that contains the HTML as a single string.
+We can pass it directly to the `htmlParse()` function
+and then we have a parsed HTML tree:
+```{r}
+library(XML)
+doc = htmlParse(txt, asText = TRUE)
+```
+
+Our next task is to find the cents per kWH (kilowatt hour) values in the page
+We can find the pattern to identify these by looking at the HTML source
+or by extract a value we see and then going up the tree.
+For this ZIP code, there is a valye of 6.09 cents. So we can find this text in the page
+and get its grandparent:
+```{r}
+getNodeSet(doc, "//text()[contains(., '6.09')]/../..")[[1]]
+```
+Why the grandparent?  Lucky guess. We adjust up and down as we explore to find a distinguishing pattern.
+
+The resulting node is 
+```
+<div class="offer-header">
+                <div class="btn-select-mobile" data-automation="offers__button--mobile">
+                  <i class="icon-checked-offer"/>
+                </div>
+                <div class="meta offer-months" data-automation="offers__label--month">
+                  <span><b class="big-month">12</b></span>
+                  <span>
+                  months
+                </span>
+                </div>
+                <div class="header offer-price" data-automation="offers__label--header-price">
+                  <span class="price-symbol hidden">¢</span>
+                  6.09
+                  <span class="price-symbol">¢</span>
+                </div>
+
+                <div class="term-language" data-automation="offers__label--per">per kWh</div>
+
+                <div class="term-aside" data-automation="offers__label--aside">
+                  
+                </div>
+                <!--template bindings={}--><div class="ui flowing popup transition" style="width: 150px;">
+
+                  <!--template bindings={}-->
+                    <div class="popup-data no-left-border">
+                      <div class="price-container">
+                        <div class="price">
+                      <span class="hidden">¢</span>
+                          6.09
+                          <span>¢</span>
+                        </div>
+                      </div>
+
+                      <div class="popup-language">
+                        per kWh
+                        for 12 months
+                      </div>
+                    </div>
+
+                    <div class="bottom-line"/>
+                  
+                </div>
+                <div class="aep-btn-light btn-more-details top desktop" data-automation="offers__button--detail">
+                  More
+                  Details
+                  <i class="icon-toggle icon-arrow-down"/>
+                </div>
+
+                <div class="line-separator">
+                  <div class="inside-line"/>
+                </div>
+
+                <div class="offers-icons">
+                  <!--template bindings={}--><img class="offer-icon" src="/static/enrollment/productType/desktop/DEFAULT_EL_FPAI.svg"/><!--template bindings={}--></div>
+              </div> 
+```
+
+So we are looking for `<div class="offer-header">`
+We can verify this by looking for the other corresponding elements
+```{r}
+getNodeSet(doc, "//div[@class = 'offer-header']")
+```
+
+If we just want the price rather than the entire offer, we can get this directly 
+with 
+```{r}
+priceNodes = getNodeSet(doc, "//div[@class = 'price']/text()")
+price = sapply(priceNodes, xmlValue, trim = TRUE)
+```
+```
+ [1] ""     "6.09" ""     ""     "5.39" ""     ""     "5.41" ""    
+[10] ""     "5.41" ""     ""     "5.83" ""    
+```
+price = price[price != ""]
+
+
+If we want the details of the plans, we could click on the "More Details" link/button.
+However, we suspect that the information is already in the document, just not being displayed.
+Why do we suspect this? Because a) it makes sense, and b) if we click on More Details, 
+the results are displayed very rapidly, indicating that there is no request back to the server
+for the information.
+Accordingly, let's find it in the page.
+
+We can write the HTML text to a file and look at it in a text editor
+to find the pattern. Alternatively, we can look for 'termination fee' and come back up the
+tree as we did with the 6.09 text value.
+We find that 
+```
+getNodeSet(doc, "//text()[contains(., 'termination fee')]/../../..")[[1]]
+```
+
+```
+<div class="more-details-container">
+                <div class="line-separator">
+                  <div class="inside-line"/>
+                </div>
+
+                <div class="data-line">
+                  <div class="data-title full-width" data-automation="offers__label--plan-title">Plan</div>
+                  <div class="data-value full-width no-html" data-automation="offers__label--plan-value">Amazon Prime Offer</div>
+                </div>
+
+                <div class="data-line">
+                  <div class="data-title full-width" data-automation="offers__label--utility-title">Utility</div>
+                  <div class="data-value full-width" data-automation="offers__label--utility-value">Duke Energy</div>
+                </div>
+
+                <div class="data-line">
+                  <div class="data-title full-width" data-automation="offers__label--price-title">Price</div>
+                  <div class="data-value full-width">
+                    <!--template bindings={}--><div class="data-value" data-automation="offers__label--price-value">
+                    <span class="hidden">¢</span>
+                      6.09
+                      <span>¢</span>
+                      <span>per kWh</span>
+                      for 12 months
+                    </div>
+                  </div>
+                </div>
+
+                <div class="data-line">
+                  <div class="data-title full-width" data-automation="offers__label--term-title">Term</div>
+                  <div class="data-value full-width" data-automation="offers__label--term-value">
+                    12
+                    <span>
+                    Months
+                  </span>
+                  </div>
+                </div>
+
+                <div class="data-line">
+                  <div class="data-title full-width" data-automation="offers__label--fee-title">Early termination fee</div>
+                  <div class="data-value sentence-text" data-automation="offers__label--fee-value">
+                    $
+                    99.00
+                    early termination fee
+                  </div>
+                </div>
+
+                <!--template bindings={}--><div class="data-line">
+                  <div class="data-title full-width" data-automation="offers__label--additional-plan-title">additional plan details</div>
+                  <div class="data-value full-width no-html" data-automation="offers__label--additional-plan-value">Enjoy a year of Amazon Prime on us!</div></div>
+
+                <div class="read-more" data-automation="offers__button--read-more">
+                  Read more
+                </div>
+                <div class="terms-conditions">
+                  <a class="termsLink" data-automation="offers__button--terms" target="_blank" href="/api/media/file?key=ExiAKfOO9Cv3ttUNyJveBeiEw5CyEtmBnfRqC59C1E05cyFD18bqTCfT6yEgWHNhtR1%2FwQ15UtdfqdIEeyCjwwWJXrbQ9muUnryiJJkJtYa9Gab17QPMh3lvC3vT%2BNXGplpl1fTscoui4npwEYz3Kys8xDz93gt6qpzMfGR9HKQ%3D">
+                    View full terms and conditions
+                  </a>
+                </div>
+
+                <div class="line-separator last">
+                  <div class="inside-line"/>
+                </div>
+              </div> 
+```
+
+We see that there is a <div> with a class named more-details-container and this is what we want.
+We can get all 5 of these with
+```{r}
+details = getNodeSet(doc, "//div[@class = 'more-details-container']")
+length(details)
+```
+
+Suppose we want all the details corresponding to the PLAN, UTILITY, PRICE, TERM, etc.
+Each of these is within a <div> with a class data-line, and each has a title and a value
+We'll write a function that takes a <div class="data-line"> node and
+extracts the value and its title and return it as a named character
+vector:
+```
+dataLine =
+function(node)
+{
+    d = node[ names(node) == "div" ]
+    val = normalizeSpace(xmlValue(d[[2]], trim = TRUE))
+    title = normalizeSpace(xmlValue(d[[1]], trim = TRUE))
+    structure(val, names = title)
+}
+```
+This calls a function normalizeSpace which collapses all each block of white space to a single
+space:
+```
+normalizeSpace =
+function(x)
+{
+  gsub("[[:space:]]+", " ", x)
+}
+```
+
+Finally, we can extract these details for each a single offer with
+```
+xpathSApply(details[[1]], ".//div[contains(@class, 'data-line')]", dataLine)
+```
+
+and for all offers with
+```
+lapply(details, function(offer) xpathSApply(offer, ".//div[contains(@class, 'data-line')]", dataLine))
+```
+
+<!-- #rD = rsDriver(browser = "phantomjs") -->

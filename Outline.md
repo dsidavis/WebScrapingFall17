@@ -8,62 +8,39 @@
 The tools are important; the thought process is more important to learn.
 
 
-## [Scraping & APIs Concepts](Scraping.md)
-    + What is scraping.
-    + APIs much preferred over scraping
-    + Better ways
-    + Rules/Restrictions for scraping.
+## [Scraping & APIs Concepts](Scraping.html)
++ What is scraping.
++ APIs much preferred over scraping
++ Better ways
++ Rules/Restrictions for scraping.
 
-## [HTTP Requests](HTTP.md)
 
+## [HTTP Requests](HTTP.html)
++ [Inflation table](Inflation.html)
 
 ## HTML Tables
++ [Inflation table](Inflation.html)
 
-
-## HTML Forms
-+ GET
-+ POST
-
+## [HTML Forms](HTTP.html)
++ [GET](Inflation.html)
++ [POST and Browser Developer Tools](directEnergy.html)
 
 ## HTML Links
++ [California Cities](CACities.R)
 
+## [XPath](XPath.html)
++ [City Rents](Rent.R)
++ [Data Science Jobs](cybercoders.R)
 
-## JavaScript & Dynamic Content
+## [JavaScript & Dynamic Content](Selenium.html)
++ [selenium.R](selenium.R)
 
-
-
-
-
-
-
-
-Use higher-level functions for submitting forms.
-Don't paste the inputs together to create the URL for a GET operation.
-Note as flexible, but more importantly, you have to escape certain characters,
-e.g. &, ? since they are used in the URL for a purpose, and also characters
-such as space, {, ...
-
-
-Web Developer Tools
-
-
-+ HTTP requests
-    + Request -> Response.
-        + Header & Body (optional)
-    + GET host/path/to/file
-    + GET with form parameters
-    + POST for sending contents
-    + See the requests in browser developer tools.
-    + Header information in request, response.
-
-
-+ HTML, XML, JSON
-
-+ XPath
+## APIs
++ [GeoCoding](geocoding.R)
++ [Renewable Energy Electricity Rates](nrel.R)
 
 
 ## HTTP Options
-
 ```
 sort(names(getCurlOptionsConstants()))
 ```
@@ -72,38 +49,8 @@ sort(names(getCurlOptionsConstants()))
 + useragent
 + cookies - cookiejar, cookie, cookiefile
 + useragent
-+ header, httpheader
++ httpheader
 + cainfo, capath, certinfo
 + userpwd
 
 ## Cookies
-
-## JavaScript & RSelenium
-
-
-
-
-## APIs
-
-
-geocoding.R
-
-nrel.R
-
-
-Permissions, Credentials
-In the header
-OAuth2
-
-Raido
-
-
-Examples
-
-readHTMLTable() - Texas ZIP codes (Bowden/stateZipCodes), CPI (Inflation.md), electricity (electricityCharges.Rmd)
-
- getHTMLLinks()
-
-
-
-

@@ -1,5 +1,7 @@
 # Scraping Web Pages
 
+The entire purpose of this is automation.
+
 Web Scraping (with one p, not two) is extracting content
 from Web pages typically designed for humans to view.
 The information is usually semi-structured, and we want to extract
@@ -53,3 +55,13 @@ prohibit you from scraping data.
 
 Check the ToS before you do someting illegal.
 
+
+# Other Alternatives
+
+Before you start scraping, see if there are better, easier ways
+to get the data.
+
+1. See if it is available for bulk download rather than individual record-at-a-time requests.
+1. Ask the owneres if they can give it to you.  (This will avoid burdening their servers.)
+1. See if thre is an API for the data, and perhaps an existing package to access it.
+1. Verify that the data are what you really want.

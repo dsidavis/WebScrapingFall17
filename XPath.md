@@ -48,3 +48,10 @@ An XPath
    All <td> nodes whose contents contain the character $
    //td[ contains(., '$') ]
 
+
+
+
+
+# Useful References
++ https://www.w3schools.com/xml/xpath_intro.asp
++ https://www.w3schools.com/xml/xpath_axes.asp

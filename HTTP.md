@@ -72,4 +72,28 @@ to regular ASCII characters and then convert them back.
 
 
 With RCurl (and hopefully other packages), all you need to know for an HTML
-form is whether it expects a GET or POST request. This is in the method
+form is whether it expects a GET or POST request. This is in the method attribute
+of the HTML form.
+
+
+
+Use higher-level functions for submitting forms. Don't paste the inputs together to create the URL for a GET operation.
+Pasting is not as flexible, but more importantly, you have to escape certain characters,
+e.g. &, ? since they are used in the URL for a purpose, and also characters
+such as space, {, ...
+
+
+
+
+
+
++ HTTP requests
+    + Request -> Response.
+        + Header & Body (optional)
+    + GET host/path/to/file
+    + GET with form parameters
+    + POST for sending contents
+    + See the requests in browser developer tools.
+    + Header information in request, response.
+
+
