@@ -1,0 +1,36 @@
+
+City data
+  readHTMLTable()
+
+Links
+ City Data
+
+ Then follow these links and extract information about each city - Rent.
+
+
+Find that in the page
+ Could use Regexpressions, but not robust enough and very challenging.
+ Use the tree structure.
+
+XPath
+  <section id="median-rent" class="median-rent"><p><b>Median gross rent in 2013:</b> $1,863.</p></section>
+
+
+
+CyberCoders jobs.
+
+https://www.cybercoders.com/search/?searchterms=Data+Scientist&searchlocation=&newsearch=true&originalsearch=true&sorttype=
+
+ Wage, Skills, Location
+
+
+
+JavaScript
+  Find the data in the HTML document
+  Fully dynamic - RSelenium
+
+APIs
+ geocoding
+ NREL
+
+

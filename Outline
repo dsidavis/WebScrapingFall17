@@ -1,0 +1,114 @@
+# Web Scraping & APIs
+
+## Workshop Goals:
+1. Become familiar with the essential tools
+2. Understand the elements of Web
+3. Explore strategies.
+
+The tools are important; the thought process is more important to learn.
+
+
++ Scraping & APIs Concepts
+    + What is scraping.
+    + APIs much preferred over scraping
+    + Better ways
+    + Rules/Restrictions for scraping.
+
++ HTML Tables
++ HTML Links
+
+## Forms
++ GET
++ POST
+
+
+Use higher-level functions for submitting forms.
+Don't paste the inputs together to create the URL for a GET operation.
+Note as flexible, but more importantly, you have to escape certain characters,
+e.g. &, ? since they are used in the URL for a purpose, and also characters
+such as space, {, ...
+
+
+Web Developer Tools
+
+
++ HTTP requests
+    + Request -> Response.
+        + Header & Body (optional)
+    + GET host/path/to/file
+    + GET with form parameters
+    + POST for sending contents
+    + See the requests in browser developer tools.
+    + Header information in request, response.
+
+
++ HTML, XML, JSON
+
++ XPath
+
+ Path - sequence of steps
+ Each step:  direction/axis, node test, optional condition
+
+ Long-hand
+      axis::test[condition]
+  e.g.
+     descendant-or-self::table
+
+  Short hand
+       //table
+      // means descendant-or-self
+
+   @attr - attribute::attr
+   
+    . - current node
+    .. - parent node
+
+   All <td> nodes whose contents contain the character $
+   //td[ contains(., '$') ]
+
+
+## HTTP Options
+
+```
+sort(names(getCurlOptionsConstants()))
+```
++ verbose
++ followlocation
++ useragent
++ cookies - cookiejar, cookie, cookiefile
++ useragent
++ header, httpheader
++ cainfo, capath, certinfo
++ userpwd
+
+## Cookies
+
+## JavaScript & RSelenium
+
+
+
+
+## APIs
+
+
+geocoding.R
+
+nrel.R
+
+
+Permissions, Credentials
+In the header
+OAuth2
+
+Raido
+
+
+Examples
+
+readHTMLTable() - Texas ZIP codes (Bowden/stateZipCodes), CPI (Inflation.md), electricity (electricityCharges.Rmd)
+
+ getHTMLLinks()
+
+
+
+

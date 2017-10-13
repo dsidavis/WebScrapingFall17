@@ -1,0 +1,30 @@
+
+Cuyahoga Falls
+
+```
+u = "http://www.cityofcf.com/departments/electric/residential-rates"
+tt = readHTMLTable(u)
+tt
+```
+
+```
+tt = readHTMLTable(u, which = 1, header = TRUE, stringsAsFactors = FALSE)
+tt
+```
+
+Convert the $ values to numbers and units
+```
+tt[tt[,2] == "N/A", 2] = NA
+tt[tt[,3] == "N/A", 3] = NA
+
+v = lapply(tt[, -1], function(x)  
+                    do.call(rbind, strsplit(x, "/")))
+
+v = lapply(v, function(x) {
+                  x = as.data.frame(x, stringsAsFactors = FALSE)
+                  x[,1] = as.numeric(gsub("\\$", "", x[,1]))
+		  x
+    	     })
+
+
+```
