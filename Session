@@ -1,0 +1,466 @@
+campus-110-029[WebScraping-51]>R
+
+R Under development (unstable) (2017-09-22 r73334) -- "Unsuffered Consequences"
+Copyright (C) 2017 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin16.7.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+PID = 1787 
+Time = 2017-10-13 10:20:45 
+Dir = /Users/duncan/DSI/Workshops/WebScraping 
+1> library(RCurl)
+[21:41] 2> u = "https://www.rateinflation.com/consumer-price-index/usa-historical-cpi"
+[22:20] 3> tt = getURLContent(u, verbose = TRUE)
+*   Trying 74.208.236.39...
+* Connected to www.rateinflation.com (74.208.236.39) port 443 (#0)
+* TLS 1.2 connection using TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+* Server certificate: www.rateinflation.com
+* Server certificate: Symantec Basic DV SSL CA - G2
+* Server certificate: VeriSign Universal Root Certification Authority
+> GET /consumer-price-index/usa-historical-cpi HTTP/1.1
+Host: www.rateinflation.com
+Accept: */*
+
+< HTTP/1.1 200 OK
+< Content-Type: text/html; charset=utf-8
+< Transfer-Encoding: chunked
+< Connection: keep-alive
+< Keep-Alive: timeout=15
+< Date: Fri, 13 Oct 2017 17:22:36 GMT
+< Server: Apache
+< Content-Location: usa-historical-cpi.php
+< Vary: negotiate
+< TCN: choice
+< X-Powered-By: PHP/5.6.31
+< 
+* Connection #0 to host www.rateinflation.com left intact
+[22:37] 4> class(tt)
+[1] "character"
+[25:05] 5> substring(tt, 1, 1000)
+[1] "<!DOCTYPE html>\n<html>\n  <head>\n      <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>\n  <title>USA Historical Consumer Price Index (CPI) - 2007 to 2017</title>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n  <meta name=\"description\" content=\"Historical Consumer Price Index (CPI) from 2007 to 2017 for USA. Monthly and annnual history.\" />\n  <meta name=\"keywords\" content=\"cpi, consumer price index, USA, American, historical, history, annual, monthly\" />\n  \n  <link type=\"text/css\" rel=\"stylesheet\" href=\"/min/g=css&2\" />\n  <link rel=\"alternate\" href=\"http://feeds.feedburner.com/Inflation-Rate\" title=\"My RSS feed\" type=\"application/rss+xml\" />\n  \n  <script type=\"text/javascript\" src=\"/min/g=js&1\"></script>\n  \n  <script>\n    $(function() {\n      $( \"#accordion\" ).accordion({ active: 12 });\n    });\n  </script>\n    <script type=\"text/javascript\">\n    var _gaq = _gaq || [];\n    _gaq.push(['_setAccount', 'UA-951912-2'])"
+attr(,"Content-Type")
+[1] "text/html"     "charset=utf-8"
+[25:12] 6> grep("15.9", tt)
+[1] 1
+[25:47] 7> substring(tt, 1, 4000)
+[1] "<!DOCTYPE html>\n<html>\n  <head>\n      <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>\n  <title>USA Historical Consumer Price Index (CPI) - 2007 to 2017</title>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n  <meta name=\"description\" content=\"Historical Consumer Price Index (CPI) from 2007 to 2017 for USA. Monthly and annnual history.\" />\n  <meta name=\"keywords\" content=\"cpi, consumer price index, USA, American, historical, history, annual, monthly\" />\n  \n  <link type=\"text/css\" rel=\"stylesheet\" href=\"/min/g=css&2\" />\n  <link rel=\"alternate\" href=\"http://feeds.feedburner.com/Inflation-Rate\" title=\"My RSS feed\" type=\"application/rss+xml\" />\n  \n  <script type=\"text/javascript\" src=\"/min/g=js&1\"></script>\n  \n  <script>\n    $(function() {\n      $( \"#accordion\" ).accordion({ active: 12 });\n    });\n  </script>\n    <script type=\"text/javascript\">\n    var _gaq = _gaq || [];\n    _gaq.push(['_setAccount', 'UA-951912-2']);\n    _gaq.push(['_trackPageview']);\n\n    (function() {\n      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';\n      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);\n    })();\n  </script>\n\n  <script>\n  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\n  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\n  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');\n\n  ga('create', 'UA-951912-4', 'rateinflation.com');\n  ga('send', 'pageview');\n\n  </script>\n  \n  </head>\n\n  <body>\n    \n  <div id=\"header\">\n    <a href=\"/\"><img width=\"127\" height=\"40\" id=\"header-img\" alt=\"Inflation Rate\" src=\"/images/rate-inflation-header.png\"/></a>\n    <ul>\n      <li><a href=\"/inflation-rate/\" title=\"Find the latest Inflation Rates\" >Inflation Rates</a></li>\n      <li><a href=\"/consumer-price-index/\" title=\"See Consumer Price Index data\" id=\"selected\">CPI</a></li>\n      <li><a href=\"/inflation-information/\" title=\"Learn about inflation\" >Inflation Info</a></li>\n      <li><a href=\"/\" title=\"Rate Inflation Overview\" >Dashboard</a></li>\n      <li><span id=\"rss-icon\"></span><a href=\"/subscribe\" title=\"Subscribe to CPI and inflation rate updates\" >Subscribe</a></li>\n    </ul>\n  </div>\n\n  <div id=\"nav-bar\">\n    <ul>\n      <li><span id=\"ar-32\"></span><a href=\"/inflation-rate/argentina-inflation-rate\" title=\"Argentine Inflation Rate\">10.95% (Dec 2013)</a></li><li><span id=\"au-32\"></span><a href=\"/inflation-rate/australia-inflation-rate\" title=\"Australian Inflation Rate\">1.9% (Jun 2017)</a></li><li><span id=\"ca-32\"></span><a href=\"/inflation-rate/canada-inflation-rate\" title=\"Canadian Inflation Rate\">1.4% (Aug 2017)</a></li><li><span id=\"de-32\"></span><a href=\"/inflation-rate/germany-inflation-rate\" title=\"German Inflation Rate\">1.8% (Sep 2017)</a></li><li><span id=\"eu-32\"></span><a href=\"/inflation-rate/euro-area-inflation-rate\" title=\"Euro area Inflation Rate\">1.5% (Aug 2017)</a></li><li><span id=\"fr-32\"></span><a href=\"/inflation-rate/france-inflation-rate\" title=\"French Inflation Rate\">0.99% (Sep 2017)</a></li><li><span id=\"it-32\"></span><a href=\"/inflation-rate/italy-inflation-rate\" title=\"Italian Inflation Rate\">1.3% (Sep 2017)</a></li><li><span id=\"jp-32\"></span><a href=\"/inflation-rate/japan-inflation-rate\" title=\"Japanese Inflation Rate\">0.6% (Aug 2017)</a></li><li><span id=\"nz-32\"></span><a href=\"/inflation-rate/new-zealand-inflation-rate\" title=\"New Zealand Inflation Rate\">1.7% (Jun 2017)</a></li><li><span id=\"ru-32\"></span><a href=\"/inflation-rate/russia-inflation-rate\" title=\"Russian Inflation Rate\">4.6% (Feb 2017)</a></li><li><span id=\"ch-32\"></span><a href=\"/inflation-rate/switzerland-inflation-rate\" title=\"Swiss Infl"
+attr(,"Content-Type")
+[1] "text/html"     "charset=utf-8"
+[29:16] 8> cat(substring(tt, 1, 4000))
+<!DOCTYPE html>
+<html>
+  <head>
+      <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <title>USA Historical Consumer Price Index (CPI) - 2007 to 2017</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="description" content="Historical Consumer Price Index (CPI) from 2007 to 2017 for USA. Monthly and annnual history." />
+  <meta name="keywords" content="cpi, consumer price index, USA, American, historical, history, annual, monthly" />
+  
+  <link type="text/css" rel="stylesheet" href="/min/g=css&2" />
+  <link rel="alternate" href="http://feeds.feedburner.com/Inflation-Rate" title="My RSS feed" type="application/rss+xml" />
+  
+  <script type="text/javascript" src="/min/g=js&1"></script>
+  
+  <script>
+    $(function() {
+      $( "#accordion" ).accordion({ active: 12 });
+    });
+  </script>
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-951912-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-951912-4', 'rateinflation.com');
+  ga('send', 'pageview');
+
+  </script>
+  
+  </head>
+
+  <body>
+    
+  <div id="header">
+    <a href="/"><img width="127" height="40" id="header-img" alt="Inflation Rate" src="/images/rate-inflation-header.png"/></a>
+    <ul>
+      <li><a href="/inflation-rate/" title="Find the latest Inflation Rates" >Inflation Rates</a></li>
+      <li><a href="/consumer-price-index/" title="See Consumer Price Index data" id="selected">CPI</a></li>
+      <li><a href="/inflation-information/" title="Learn about inflation" >Inflation Info</a></li>
+      <li><a href="/" title="Rate Inflation Overview" >Dashboard</a></li>
+      <li><span id="rss-icon"></span><a href="/subscribe" title="Subscribe to CPI and inflation rate updates" >Subscribe</a></li>
+    </ul>
+  </div>
+
+  <div id="nav-bar">
+    <ul>
+      <li><span id="ar-32"></span><a href="/inflation-rate/argentina-inflation-rate" title="Argentine Inflation Rate">10.95% (Dec 2013)</a></li><li><span id="au-32"></span><a href="/inflation-rate/australia-inflation-rate" title="Australian Inflation Rate">1.9% (Jun 2017)</a></li><li><span id="ca-32"></span><a href="/inflation-rate/canada-inflation-rate" title="Canadian Inflation Rate">1.4% (Aug 2017)</a></li><li><span id="de-32"></span><a href="/inflation-rate/germany-inflation-rate" title="German Inflation Rate">1.8% (Sep 2017)</a></li><li><span id="eu-32"></span><a href="/inflation-rate/euro-area-inflation-rate" title="Euro area Inflation Rate">1.5% (Aug 2017)</a></li><li><span id="fr-32"></span><a href="/inflation-rate/france-inflation-rate" title="French Inflation Rate">0.99% (Sep 2017)</a></li><li><span id="it-32"></span><a href="/inflation-rate/italy-inflation-rate" title="Italian Inflation Rate">1.3% (Sep 2017)</a></li><li><span id="jp-32"></span><a href="/inflation-rate/japan-inflation-rate" title="Japanese Inflation Rate">0.6% (Aug 2017)</a></li><li><span id="nz-32"></span><a href="/inflation-rate/new-zealand-inflation-rate" title="New Zealand Inflation Rate">1.7% (Jun 2017)</a></li><li><span id="ru-32"></span><a href="/inflation-rate/russia-inflation-rate" title="Russian Inflation Rate">4.6% (Feb 2017)</a></li><li><span id="ch-32"></span><a href="/inflation-rate/switzerland-inflation-rate" title="Swiss Infl[33:45] 9> '"'
+[1] "\""
+[34:03] 10> doc = htmlParse(tt)
+Error in htmlParse(tt) : could not find function "htmlParse"
+No suitable frames for recover()
+[34:03] 10> library(XML)
+[35:45] 11> doc = htmlParse(tt)
+[35:51] 12> tbl = readHTMLTable(doc)
+[39:06] 13> length(tbl)
+[1] 1
+[39:54] 14> class(tbl[[1]])
+[1] "data.frame"
+[40:24] 15> dim(tbl[[1]])
+[1] 12 14
+[40:34] 16> tbl[[1]]
+     V1      V2      V3      V4      V5      V6      V7      V8
+1  Year     jan     feb     mar     apr     may     jun     jul
+2  2017 242.839 243.603 243.801 244.524 244.733 244.955 244.786
+3  2016 236.916 237.111 238.132 239.261 240.236 241.038 240.647
+4  2015 233.707 234.722 236.119 236.599 237.805 238.638 238.654
+5  2014 233.916 234.781 236.293 237.072   237.9 238.343  238.25
+6  2013  230.28 232.166 232.773 232.531 232.945 233.504 233.596
+7  2012 226.665 227.663 229.392 230.085 229.815 229.478 229.104
+8  2011 220.223 221.309 223.467 224.906 225.964 225.722 225.922
+9  2010 216.687 216.741 217.631 218.009 218.178 217.965 218.011
+10 2009 211.143 212.193 212.709  213.24 213.856 215.693 215.351
+11 2008  211.08 211.693 213.528 214.823 216.632 218.815 219.964
+12 2007 202.416 203.499 205.352 206.686 207.949 208.352 208.299
+        V9     V10     V11     V12     V13     V14
+1      aug     sep     oct     nov     dec     ann
+2  245.519 246.819                                
+3  240.849 241.428 241.729 241.353 241.432 240.011
+4  238.316 237.945 237.838 237.336 236.525 237.017
+5  237.852 238.031 237.433 236.151 234.812 236.736
+6  233.877 234.149 233.546 233.069 233.049 232.957
+7  230.379 231.407 231.317 230.221 229.601 229.594
+8  226.545 226.889 226.421  226.23 225.672 224.939
+9  218.312 218.439 218.711 218.803 219.179 218.055
+10 215.834 215.969 216.177  216.33 215.949 214.537
+11 219.086 218.783 216.573 212.425 210.228 215.303
+12 207.917  208.49 208.936 210.177 210.036 207.342
+[40:53] 17> tbl = readHTMLTable(doc, header = TRUE)
+[42:08] 18> tbl[[1]]
+   Year     jan     feb     mar     apr     may     jun     jul
+1  2017 242.839 243.603 243.801 244.524 244.733 244.955 244.786
+2  2016 236.916 237.111 238.132 239.261 240.236 241.038 240.647
+3  2015 233.707 234.722 236.119 236.599 237.805 238.638 238.654
+4  2014 233.916 234.781 236.293 237.072   237.9 238.343  238.25
+5  2013  230.28 232.166 232.773 232.531 232.945 233.504 233.596
+6  2012 226.665 227.663 229.392 230.085 229.815 229.478 229.104
+7  2011 220.223 221.309 223.467 224.906 225.964 225.722 225.922
+8  2010 216.687 216.741 217.631 218.009 218.178 217.965 218.011
+9  2009 211.143 212.193 212.709  213.24 213.856 215.693 215.351
+10 2008  211.08 211.693 213.528 214.823 216.632 218.815 219.964
+11 2007 202.416 203.499 205.352 206.686 207.949 208.352 208.299
+       aug     sep     oct     nov     dec     ann
+1  245.519 246.819                                
+2  240.849 241.428 241.729 241.353 241.432 240.011
+3  238.316 237.945 237.838 237.336 236.525 237.017
+4  237.852 238.031 237.433 236.151 234.812 236.736
+5  233.877 234.149 233.546 233.069 233.049 232.957
+6  230.379 231.407 231.317 230.221 229.601 229.594
+7  226.545 226.889 226.421  226.23 225.672 224.939
+8  218.312 218.439 218.711 218.803 219.179 218.055
+9  215.834 215.969 216.177  216.33 215.949 214.537
+10 219.086 218.783 216.573 212.425 210.228 215.303
+11 207.917  208.49 208.936 210.177 210.036 207.342
+[42:11] 19> 
+[42:11] 19> sapply(tbl[[1]], class)
+    Year      jan      feb      mar      apr      may      jun 
+"factor" "factor" "factor" "factor" "factor" "factor" "factor" 
+     jul      aug      sep      oct      nov      dec      ann 
+"factor" "factor" "factor" "factor" "factor" "factor" "factor" 
+[45:18] 20> tbl = readHTMLTable(doc, header = TRUE, stringsAsFactors = FALSE)
+[45:28] 21> sapply(tbl[[1]], class)
+       Year         jan         feb         mar         apr 
+"character" "character" "character" "character" "character" 
+        may         jun         jul         aug         sep 
+"character" "character" "character" "character" "character" 
+        oct         nov         dec         ann 
+"character" "character" "character" "character" 
+[45:31] 22> z = readHTMLTable("http://www.zipcodestogo.com/Texas/", stringsAsFactors = FALSE, which = 2, header = TRUE)
+
+[49:34] 23> [49:34] 23> getu
+Error: object 'getu' not found
+No suitable frames for recover()
+[49:34] 23> u
+[1] "https://www.rateinflation.com/consumer-price-index/usa-historical-cpi"
+[53:44] 24> txt = getForm(u, 'start-year' = 1913, 'end-year' = 2010)
+[54:14] 25> tbl2 = readHTMLTable(htmlParse(txt), header = TRUE)
+[54:37] 26> dim(tbl2[[1]])
+[1] 98 14
+[54:45] 27> # https://www.cybercoders.com/search/?searchterms=Data+Scientist&searchlocation=&newsearch=true&originalsearch=true&sorttype=
+[54:45] 27> # https://www.cybercoders.com/search/?page=2&searchterms=Data%20Scientist&searchlocation=&newsearch=true&originalsearch=true&sorttype=
+[54:45] 27> library(RCurl)
+u = "https://www.cybercoders.com/search/"
+[03:11] 28> [03:11] 29> txt = getForm(u, searchterms = "Data Scientist")
+[03:33] 30> doc = htmlParse(txt)
+[04:00] 31> getNodeSet(doc, "//a[@rel = 'next']")
+[[1]]
+<a class="get-search-results next" rel="next" href="./?page=2&amp;searchterms=Data%20Scientist">»</a> 
+
+[[2]]
+<a class="get-search-results next float-right" rel="next" href="./?page=2&amp;searchterms=Data%20Scientist">
+  <span>Next</span>
+</a> 
+
+attr(,"class")
+[1] "XMLNodeSet"
+[04:46] 32> getNodeSet(doc, "//a[@rel = 'next']/@href")
+[[1]]
+                                    href 
+"./?page=2&searchterms=Data%20Scientist" 
+attr(,"class")
+[1] "XMLAttributeValue"
+
+[[2]]
+                                    href 
+"./?page=2&searchterms=Data%20Scientist" 
+attr(,"class")
+[1] "XMLAttributeValue"
+
+attr(,"class")
+[1] "XMLNodeSet"
+[05:01] 33> getNodeSet(doc, "//li[contains(@class, 'lnk-next')]/a[@rel = 'next']/")
+XPath error : Invalid expression
+XPath error : Invalid expression
+Error in xpathApply.XMLInternalDocument(doc, path, fun, ..., namespaces = namespaces,  : 
+  error evaluating xpath expression //li[contains(@class, 'lnk-next')]/a[@rel = 'next']/
+
+Enter a frame number, or 0 to exit   
+
+1: getNodeSet(doc, "//li[contains(@class, 'lnk-next')]/a[@rel = 'nex
+2: xpathApply(doc, path, fun, ..., namespaces = namespaces, sessionE
+3: xpathApply.XMLInternalDocument(doc, path, fun, ..., namespaces = 
+
+Selection: 0
+[05:01] 33> getNodeSet(doc, "//li[contains(@class, 'lnk-next')]/a[@rel = 'next']")
+[[1]]
+<a class="get-search-results next" rel="next" href="./?page=2&amp;searchterms=Data%20Scientist">»</a> 
+
+[[2]]
+<a class="get-search-results next float-right" rel="next" href="./?page=2&amp;searchterms=Data%20Scientist">
+  <span>Next</span>
+</a> 
+
+attr(,"class")
+[1] "XMLNodeSet"
+[11:38] 34> n = getNodeSet(doc, "//li[contains(@class, 'lnk-next')]/a[@rel = 'next']")[[1]]
+[11:57] 35> n
+<a class="get-search-results next" rel="next" href="./?page=2&amp;searchterms=Data%20Scientist">»</a> 
+[11:58] 36> xmlValue(n)
+[1] "»"
+[12:09] 37> xmlChildren(n)
+$text
+» 
+
+attr(,"class")
+[1] "XMLInternalNodeList" "XMLNodeList"        
+[12:15] 38> xmlParent(n)
+<li class="lnk-next pager-item ">
+  <a class="get-search-results next" rel="next" href="./?page=2&amp;searchterms=Data%20Scientist">»</a>
+</li> 
+[12:21] 39> xmlAttrs(n)
+                                   class 
+               "get-search-results next" 
+                                     rel 
+                                  "next" 
+                                    href 
+"./?page=2&searchterms=Data%20Scientist" 
+[12:37] 40> getNodeSet(doc, "//text()[contains('$120k')]")
+XPath error : Invalid number of arguments
+XPath error : Invalid expression
+Error in xpathApply.XMLInternalDocument(doc, path, fun, ..., namespaces = namespaces,  : 
+  error evaluating xpath expression //text()[contains('$120k')]
+
+Enter a frame number, or 0 to exit   
+
+1: getNodeSet(doc, "//text()[contains('$120k')]")
+2: xpathApply(doc, path, fun, ..., namespaces = namespaces, sessionE
+3: xpathApply.XMLInternalDocument(doc, path, fun, ..., namespaces = 
+
+Selection: 0
+[12:37] 40> getNodeSet(doc, "//text()[contains(., '$120k')]")
+[[1]]
+ $120k - $160k 
+
+[[2]]
+ $95k - $120k 
+
+[[3]]
+ $120k - $140k 
+
+[[4]]
+ $90k - $120k 
+
+[[5]]
+ $120k - $160k 
+
+attr(,"class")
+[1] "XMLNodeSet"
+[15:01] 41> n = getNodeSet(doc, "//text()[contains(., '$120k')]")[[1]]
+[15:11] 42> xmlParent(n)
+<div class="wage"><span>Full-time</span> $120k - $160k</div> 
+[15:28] 43> 
+[15:28] 43> xmlParent(xmlParent(n))
+<div class="details">&#13;
+            <div class="location">Naperville, IL</div>&#13;
+&#13;
+&#13;
+&#13;
+                <div class="wage"><span>Full-time</span> $120k - $160k</div>&#13;
+            <div class="posted"><span>Posted</span> 09/15/2017</div>&#13;
+        </div> 
+[16:01] 44> xmlParent(xmlParent(xmlParent(n)))
+<div class="job-details-container">&#13;
+        <div class="job-title">&#13;
+            <a href="/data-scientist-job-374687">Data Scientist</a>&#13;
+        </div>&#13;
+        <div class="details">&#13;
+            <div class="location">Naperville, IL</div>&#13;
+&#13;
+&#13;
+&#13;
+                <div class="wage"><span>Full-time</span> $120k - $160k</div>&#13;
+            <div class="posted"><span>Posted</span> 09/15/2017</div>&#13;
+        </div>&#13;
+        <div class="description">&#13;
+            If you are a Data Scientist with experience, please read on! What You Need for this Position At Least 3 Years of experience and knowledge of: - Machine Learning - Python - R So, if you are a Data Scie...&#13;
+        </div>&#13;
+            <div class="skills">&#13;
+                <ul class="skill-list"><li class="skill-item">&#13;
+                            <a href="/search/machine-learning-skills/">&#13;
+                                <span class="left-off"/>&#13;
+                                <span class="skill-name">Machine Learning</span>&#13;
+                                <span class="right"/>&#13;
+                            </a>&#13;
+                        </li>&#13;
+                        <li class="skill-item">&#13;
+                            <a href="/search/python-skills/">&#13;
+                                <span class="left-off"/>&#13;
+                                <span class="skill-name">Python</span>&#13;
+                                <span class="right"/>&#13;
+                            </a>&#13;
+                        </li>&#13;
+                        <li class="skill-item">&#13;
+                            <a href="/search/r-skills/">&#13;
+                                <span class="left-off"/>&#13;
+                                <span class="skill-name">R</span>&#13;
+                                <span class="right"/>&#13;
+                            </a>&#13;
+                        </li>&#13;
+                </ul></div>&#13;
+    </div> 
+[16:13] 45> j = getNodeSet(doc, "//div[@class = 'job-details-container']")
+[17:20] 46> length(j)
+[1] 20
+[17:22] 47> getNodeSet(j[[1]], ".//span[@class = 'skill-name']")
+[[1]]
+<span class="skill-name">Machine Learning</span> 
+
+[[2]]
+<span class="skill-name">Python</span> 
+
+[[3]]
+<span class="skill-name">R</span> 
+
+attr(,"class")
+[1] "XMLNodeSet"
+[18:19] 48> sapply(getNodeSet(j[[1]], ".//span[@class = 'skill-name']"), xmlValue)
+[1] "Machine Learning" "Python"           "R"               
+[18:31] 49> library(RSelenium)
+[45:39] 50> remDr = remoteDriver(browserName = 'firefox')
+[45:44] 51> remDr$open()
+*** output flushed ***
+[45:54] 52> u = "https://www.aepenergy.com/"
+remDr$navigate(u)
+[46:38] 53> [46:39] 54> zip = remDr$findElement("id", "region__input--zip")
+[49:51] 55> zip
+[1] "remoteDriver fields"
+$remoteServerAddr
+[1] "localhost"
+
+$port
+[1] 4444
+
+$browserName
+[1] "firefox"
+
+$version
+[1] ""
+
+$platform
+[1] "ANY"
+
+$javascript
+[1] TRUE
+
+$nativeEvents
+[1] TRUE
+
+$extraCapabilities
+list()
+
+[1] "webElement fields"
+$elementId
+[1] "84d399d0-8fdc-1b47-9de6-780d2c4bbddf"
+
+[49:52] 56> zip$sendKeysToElement(list("45201\n"))
+[50:18] 57> enter = remDr$findElement("id", "region__link--enter")
+[50:48] 58> enter
+[1] "remoteDriver fields"
+$remoteServerAddr
+[1] "localhost"
+
+$port
+[1] 4444
+
+$browserName
+[1] "firefox"
+
+$version
+[1] ""
+
+$platform
+[1] "ANY"
+
+$javascript
+[1] TRUE
+
+$nativeEvents
+[1] TRUE
+
+$extraCapabilities
+list()
+
+[1] "webElement fields"
+$elementId
+[1] "616fcdd0-672a-4848-b32f-407fd5a697d7"
+
+[50:49] 59> enter$clickElement()
+[50:55] 60> enroll = remDr$findElement("xpath", "//a[. = 'Enroll Now']")
+enroll$clickElement()
+[51:31] 61> [51:34] 62> txt = remDr$getPageSource()
+[52:13] 63> 
