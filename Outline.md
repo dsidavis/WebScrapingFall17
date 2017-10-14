@@ -1,5 +1,9 @@
 # Web Scraping & APIs
 
+
++ Git Repository:  https://github.com/dsidavis/WebScrapingFall17
++ Web Page:  http://dsi.ucdavis.edu/WebScraping/
+
 ## Workshop Goals:
 2. Understand the role of elements of the Web (HTTP, HTML, JSON, XPath, XML, JavaScript)
 1. Become familiar with the essential tools to work with some of these
@@ -54,3 +58,21 @@ sort(names(getCurlOptionsConstants()))
 + userpwd
 
 ## Cookies
+
+## R  Functions
+
+### HTML/XML
++ xmlParse(), htmlParse()
++ getNodeSet(), xpathSApply()
++ xmlValue(), xmlGetAttr(), xmlAttrs()
++ xmlParent(), xmlSApply(), xmlChildren()
+
+### RCurl
++ getURLContent(), getForm(), postForm()
+
+### JSON
++ fromJSON(), toJSON()
+
+
+
+
