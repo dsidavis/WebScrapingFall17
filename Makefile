@@ -1,6 +1,8 @@
-MD_FILES=Outline.md Scraping.md HTTP.md Inflation.md directEnergy.Rmd XPath.md Selenium.md
+MD_FILES=Outline.md Scraping.md HTTP.md Inflation.md XPath.md Selenium.md
 
-HTML_FILES=$(patsubst %.md,%.html,$(patsubst %.Rmd,%.html,$(MD_FILES)))
+# directEnergy.md
+
+HTML_FILES=$(patsubst %.md,%.html,$(MD_FILES))
 
 all: $(HTML_FILES)
 	@echo "Done"
