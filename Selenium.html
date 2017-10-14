@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Selenium.md</title>
+  <link rel="stylesheet" href="OmegaTech.css">
+</head>
+<body>
+<h1 id="dynamic-content-javascript">Dynamic Content &amp; JavaScript</h1>
+<p>When scraping, we are increasingly encountering pages whose<br>contents are not in static HTML downloaded from the server,<br>but which are dynamically generated within the user&#39;s Web browser.<br>This adds so much power and richness, but makes scraping so much harder.</p>
+<p>In some cases, we are lucky and the data that we want is actually included<br>in the page or available separately as a separate download.<br>This might be as text in the HTML in the form of  JavaScript code or<br>as a separate download of a JSON (JavaScript Object Notation) file.</p>
+<p>In other cases, the content is determined only when the page is rendered and<br>is updated based on user interactions and inputs.</p>
+<p>There are 6 different scenarios for our purposes:</p>
+<ol>
+<li>The page is static and defined entirely by the HTML sent by the server and is rendered by the<br>browser statically.</li>
+<li>The page is downloaded and the content dynamically generated when browser displays the page, but<br>the content is then fixed.<ol>
+<li>The data are in the HTML content for the page. </li>
+<li>The data are retrieved separately from the HTML </li>
+<li>The data are generated programmatically.</li>
+</ol>
+</li>
+<li>The content is updated and changed programmatically via user input.</li>
+</ol>
+<ol>
+<li>For scenarios 1 - 3, we can scrape in the usual manner.</li>
+<li>For scenario 4, we may want to find out how to get the data files that the<br>Web page subsequently </li>
+</ol>
+<p>For 5 &amp; 6, we need to run the JavaScript code and then get the resulting content.<br>This means we need a Web browser to do the job for us. But we want to do this<br>programmatically. To do this, we need to remote-control a Web browser.<br>Selenium is one such tool and the RSelenium package allows us to do this from R.</p>
+<h1 id="selenium-and-webdriver">Selenium and WebDriver</h1>
+<h2 id="running-the-server">Running the Server</h2>
+<p>There are many different ways to run the Selenium<br>server. The recommended way is via Docker.</p>
+<p>Here is a way to run it locally on your own operating system<br>as a stand-alone application.</p>
+<pre><code><div class="highlight"><pre><span class="nx">java</span> <span class="o">-</span><span class="nx">Dwebdriver</span><span class="p">.</span><span class="nx">gecko</span><span class="p">.</span><span class="nx">driver</span><span class="o">=</span><span class="err">`</span><span class="nx">pwd</span><span class="err">`</span><span class="o">/</span><span class="nx">geckodriver</span> <span class="o">-</span><span class="nx">Dwebdriver</span><span class="p">.</span><span class="nx">chrome</span><span class="p">.</span><span class="nx">driver</span><span class="o">=</span><span class="err">`</span><span class="nx">pwd</span><span class="err">`</span><span class="o">/</span><span class="nx">chromedriver</span> <span class="o">-</span><span class="nx">jar</span> <span class="nx">selenium</span><span class="o">-</span><span class="nx">server</span><span class="o">-</span><span class="nx">standalone</span><span class="o">-</span><span class="mf">3.6</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="nx">jar</span>
+</pre></div>
+
+</code></pre><p>The <code>-D-Dwebdriver.gecko.driver=</code> part of the command tells the server where to<br>find the executable needed to run the Gecko server. Similarly for the chrome server.<br>In our case, we have them in the same directory from which we are running the server.</p>
+<h2 id="installation">Installation</h2>
+<p>Download the geckodriver for Firefox at<br>    <a href="https://github.com/mozilla/geckodriver/releases/tag/v0.19.0">https://github.com/mozilla/geckodriver/releases/tag/v0.19.0</a></p>
+<p>For Google Chrome, you can download the driver at<br>  <a href="https://sites.google.com/a/chromium.org/chromedriver/downloads">https://sites.google.com/a/chromium.org/chromedriver/downloads</a></p>
+<p>There is an R package (wdman) and a node JS tool to help manage all of this for you.</p>
+</body>
+</html>

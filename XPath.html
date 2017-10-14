@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>XPath.md</title>
+  <link rel="stylesheet" href="OmegaTech.css">
+</head>
+<body>
+<h1 id="xpath">XPath</h1>
+<p>XPath is designed to make working with HTML/XML trees<br>convenient.<br>It is terse, powerful language for working with these trees.<br>It allows us to specify patterns for identifying nodes in trees.<br>It is analogous to regular expressions, but for trees.<br>(Some people use regular expressions for working with HTML/XML trees. Don&#39;t!)</p>
+<p>XPath is a domain specific language (DSL) or sub-language that<br>is available in R, Python, etc.<br>We specify our pattern/query within a string and R never looks at it.<br>Another engine applies it to the particular tree.</p>
+<p>As the name suggests, an XPath pattern/query<br>specifies a path. </p>
+<ul>
+<li>The path starts from a node (by default the topmost or root of the tree).</li>
+<li>A path is a sequence of steps, separated by a /.</li>
+</ul>
+<p>XPath queries are like navigating a file system, but much more expressive<br>and succinct.</p>
+<p>Each step in an XPath query has 3 elements, with one being optional</p>
+<ul>
+<li>axis/direction</li>
+<li>node test (name or type)</li>
+<li>condition/predicate</li>
+</ul>
+<p>An XPath </p>
+<p> Path - sequence of steps<br> Each step:  direction/axis, node test, optional condition</p>
+<p> Long-hand<br>      axis::test[condition]<br>  e.g.<br>     descendant-or-self::table</p>
+<p>  Short hand<br>       //table<br>      // means descendant-or-self</p>
+<p>   @attr - attribute::attr</p>
+<pre><code><div class="highlight"><pre><span class="p">.</span> <span class="o">-</span> <span class="nx">current</span> <span class="nx">node</span>
+<span class="p">..</span> <span class="o">-</span> <span class="nx">parent</span> <span class="nx">node</span>
+</pre></div>
+
+</code></pre><p>   All &lt;td&gt; nodes whose contents contain the character $<br>   //td[ contains(., &#39;$&#39;) ]</p>
+<h1 id="useful-references">Useful References</h1>
+<ul>
+<li><a href="https://www.w3schools.com/xml/xpath_intro.asp">https://www.w3schools.com/xml/xpath_intro.asp</a></li>
+<li><a href="https://www.w3schools.com/xml/xpath_axes.asp">https://www.w3schools.com/xml/xpath_axes.asp</a></li>
+</ul>
+</body>
+</html>

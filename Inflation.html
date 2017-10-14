@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Inflation.md</title>
+  <link rel="stylesheet" href="OmegaTech.css">
+</head>
+<body>
+<h1 id="reading-html-tables">Reading HTML Tables</h1>
+<p>We want to get the CPI (consumer price index)<br>for each month for the last few years.<br>The Web page<br><a href="https://www.rateinflation.com/consumer-price-index/usa-historical-cpi">https://www.rateinflation.com/consumer-price-index/usa-historical-cpi</a><br>provides this.</p>
+<p>We want to read the values into a data frame in R.<br>We can cut-and-paste, but we want to automate this.</p>
+<p>There are two steps.</p>
+<ol>
+<li>First we retrieve the HTML document.</li>
+<li>Then we extract the values from the table.</li>
+</ol>
+<pre><code class="lang-r"><div class="highlight"><pre><span class="kn">library</span><span class="p">(</span>RCurl<span class="p">)</span>
+u <span class="o">=</span> <span class="s">&quot;https://www.rateinflation.com/consumer-price-index/usa-historical-cpi&quot;</span>
+tt <span class="o">=</span> getURLContent<span class="p">(</span>u<span class="p">)</span>
+</pre></div>
+
+</code></pre>
+<p>We&#39;ll see what happens in this request by adding the verbose = TRUE option:</p>
+<pre><code><div class="highlight"><pre><span class="nx">tt</span> <span class="o">=</span> <span class="nx">getURLContent</span><span class="p">(</span><span class="nx">u</span><span class="p">,</span> <span class="nx">verbose</span> <span class="o">=</span> <span class="nx">TRUE</span><span class="p">)</span>
+</pre></div>
+
+</code></pre><p>(There are lots of options for  controlling the request  from within R.<br>See</p>
+<pre><code><div class="highlight"><pre><span class="nx">sort</span><span class="p">(</span><span class="nx">names</span><span class="p">(</span><span class="nx">getCurlOptionsConstants</span><span class="p">()))</span>
+</pre></div>
+
+</code></pre><p>)</p>
+<p>Now that we have the contents of the document as a string in R,<br>we can parse it into something we can work with conveniently.<br>We could treat it as a string, but it is better to take<br>advantage of the <a href="HTML.html">structure of HTML/XML</a>.</p>
+<p>In R, we can use the XML package, or xml2 package,<br>to parse the HTML content into a tree.</p>
+<pre><code><div class="highlight"><pre><span class="nx">library</span><span class="p">(</span><span class="nx">XML</span><span class="p">)</span>
+<span class="nx">doc</span> <span class="o">=</span> <span class="nx">htmlParse</span><span class="p">(</span><span class="nx">tt</span><span class="p">)</span>
+</pre></div>
+
+</code></pre><p>Now we can pass the document to the readHTMLTable() to<br>find every table in the document and convert each to a separate data frame:</p>
+<pre><code><div class="highlight"><pre><span class="nx">tbl</span> <span class="o">=</span> <span class="nx">readHTMLTable</span><span class="p">(</span><span class="nx">doc</span><span class="p">)</span>
+</pre></div>
+
+</code></pre><p>In this document, there is only one table:</p>
+<pre><code><div class="highlight"><pre><span class="nx">length</span><span class="p">(</span><span class="nx">tbl</span><span class="p">)</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="mi">1</span>
+<span class="nx">dim</span><span class="p">(</span><span class="nx">tbl</span><span class="p">[[</span><span class="mi">1</span><span class="p">]])</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="mi">12</span> <span class="mi">14</span>
+</pre></div>
+
+</code></pre><p>Let&#39;s look at it:</p>
+<pre><code><div class="highlight"><pre><span class="nx">tbl</span><span class="p">[[</span><span class="mi">1</span><span class="p">]]</span>
+     <span class="nx">V1</span>      <span class="nx">V2</span>      <span class="nx">V3</span>      <span class="nx">V4</span>      <span class="nx">V5</span>      <span class="nx">V6</span>      <span class="nx">V7</span>      <span class="nx">V8</span>
+<span class="mi">1</span>  <span class="nx">Year</span>     <span class="nx">jan</span>     <span class="nx">feb</span>     <span class="nx">mar</span>     <span class="nx">apr</span>     <span class="nx">may</span>     <span class="nx">jun</span>     <span class="nx">jul</span>
+<span class="mi">2</span>  <span class="mi">2017</span> <span class="mf">242.839</span> <span class="mf">243.603</span> <span class="mf">243.801</span> <span class="mf">244.524</span> <span class="mf">244.733</span> <span class="mf">244.955</span> <span class="mf">244.786</span>
+<span class="mi">3</span>  <span class="mi">2016</span> <span class="mf">236.916</span> <span class="mf">237.111</span> <span class="mf">238.132</span> <span class="mf">239.261</span> <span class="mf">240.236</span> <span class="mf">241.038</span> <span class="mf">240.647</span>
+<span class="mi">4</span>  <span class="mi">2015</span> <span class="mf">233.707</span> <span class="mf">234.722</span> <span class="mf">236.119</span> <span class="mf">236.599</span> <span class="mf">237.805</span> <span class="mf">238.638</span> <span class="mf">238.654</span>
+<span class="mi">5</span>  <span class="mi">2014</span> <span class="mf">233.916</span> <span class="mf">234.781</span> <span class="mf">236.293</span> <span class="mf">237.072</span>   <span class="mf">237.9</span> <span class="mf">238.343</span>  <span class="mf">238.25</span>
+<span class="mi">6</span>  <span class="mi">2013</span>  <span class="mf">230.28</span> <span class="mf">232.166</span> <span class="mf">232.773</span> <span class="mf">232.531</span> <span class="mf">232.945</span> <span class="mf">233.504</span> <span class="mf">233.596</span>
+<span class="mi">7</span>  <span class="mi">2012</span> <span class="mf">226.665</span> <span class="mf">227.663</span> <span class="mf">229.392</span> <span class="mf">230.085</span> <span class="mf">229.815</span> <span class="mf">229.478</span> <span class="mf">229.104</span>
+<span class="mi">8</span>  <span class="mi">2011</span> <span class="mf">220.223</span> <span class="mf">221.309</span> <span class="mf">223.467</span> <span class="mf">224.906</span> <span class="mf">225.964</span> <span class="mf">225.722</span> <span class="mf">225.922</span>
+<span class="mi">9</span>  <span class="mi">2010</span> <span class="mf">216.687</span> <span class="mf">216.741</span> <span class="mf">217.631</span> <span class="mf">218.009</span> <span class="mf">218.178</span> <span class="mf">217.965</span> <span class="mf">218.011</span>
+<span class="mi">10</span> <span class="mi">2009</span> <span class="mf">211.143</span> <span class="mf">212.193</span> <span class="mf">212.709</span>  <span class="mf">213.24</span> <span class="mf">213.856</span> <span class="mf">215.693</span> <span class="mf">215.351</span>
+<span class="mi">11</span> <span class="mi">2008</span>  <span class="mf">211.08</span> <span class="mf">211.693</span> <span class="mf">213.528</span> <span class="mf">214.823</span> <span class="mf">216.632</span> <span class="mf">218.815</span> <span class="mf">219.964</span>
+<span class="mi">12</span> <span class="mi">2007</span> <span class="mf">202.416</span> <span class="mf">203.499</span> <span class="mf">205.352</span> <span class="mf">206.686</span> <span class="mf">207.949</span> <span class="mf">208.352</span> <span class="mf">208.299</span>
+        <span class="nx">V9</span>     <span class="nx">V10</span>     <span class="nx">V11</span>     <span class="nx">V12</span>     <span class="nx">V13</span>     <span class="nx">V14</span>
+<span class="mi">1</span>      <span class="nx">aug</span>     <span class="nx">sep</span>     <span class="nx">oct</span>     <span class="nx">nov</span>     <span class="nx">dec</span>     <span class="nx">ann</span>
+<span class="mi">2</span>  <span class="mf">245.519</span>                                        
+<span class="mi">3</span>  <span class="mf">240.849</span> <span class="mf">241.428</span> <span class="mf">241.729</span> <span class="mf">241.353</span> <span class="mf">241.432</span> <span class="mf">240.011</span>
+<span class="mi">4</span>  <span class="mf">238.316</span> <span class="mf">237.945</span> <span class="mf">237.838</span> <span class="mf">237.336</span> <span class="mf">236.525</span> <span class="mf">237.017</span>
+<span class="mi">5</span>  <span class="mf">237.852</span> <span class="mf">238.031</span> <span class="mf">237.433</span> <span class="mf">236.151</span> <span class="mf">234.812</span> <span class="mf">236.736</span>
+<span class="mi">6</span>  <span class="mf">233.877</span> <span class="mf">234.149</span> <span class="mf">233.546</span> <span class="mf">233.069</span> <span class="mf">233.049</span> <span class="mf">232.957</span>
+<span class="mi">7</span>  <span class="mf">230.379</span> <span class="mf">231.407</span> <span class="mf">231.317</span> <span class="mf">230.221</span> <span class="mf">229.601</span> <span class="mf">229.594</span>
+<span class="mi">8</span>  <span class="mf">226.545</span> <span class="mf">226.889</span> <span class="mf">226.421</span>  <span class="mf">226.23</span> <span class="mf">225.672</span> <span class="mf">224.939</span>
+<span class="mi">9</span>  <span class="mf">218.312</span> <span class="mf">218.439</span> <span class="mf">218.711</span> <span class="mf">218.803</span> <span class="mf">219.179</span> <span class="mf">218.055</span>
+<span class="mi">10</span> <span class="mf">215.834</span> <span class="mf">215.969</span> <span class="mf">216.177</span>  <span class="mf">216.33</span> <span class="mf">215.949</span> <span class="mf">214.537</span>
+<span class="mi">11</span> <span class="mf">219.086</span> <span class="mf">218.783</span> <span class="mf">216.573</span> <span class="mf">212.425</span> <span class="mf">210.228</span> <span class="mf">215.303</span>
+<span class="mi">12</span> <span class="mf">207.917</span>  <span class="mf">208.49</span> <span class="mf">208.936</span> <span class="mf">210.177</span> <span class="mf">210.036</span> <span class="mf">207.342</span>
+</pre></div>
+
+</code></pre><p>The column names (Year, jan, feb, ...) are in the first row and we have generic column names<br>V1, V2, ...<br>So we tell <code>readHTMLTable()</code> the table has a header line:</p>
+<pre><code><div class="highlight"><pre><span class="nx">tbl</span> <span class="o">=</span> <span class="nx">readHTMLTable</span><span class="p">(</span><span class="nx">doc</span><span class="p">,</span> <span class="nx">header</span> <span class="o">=</span> <span class="nx">TRUE</span><span class="p">)</span>
+<span class="nx">tbl</span><span class="p">[[</span><span class="mi">1</span><span class="p">]]</span>
+   <span class="nx">Year</span>     <span class="nx">jan</span>     <span class="nx">feb</span>     <span class="nx">mar</span>     <span class="nx">apr</span>     <span class="nx">may</span>     <span class="nx">jun</span>     <span class="nx">jul</span>
+<span class="mi">1</span>  <span class="mi">2017</span> <span class="mf">242.839</span> <span class="mf">243.603</span> <span class="mf">243.801</span> <span class="mf">244.524</span> <span class="mf">244.733</span> <span class="mf">244.955</span> <span class="mf">244.786</span>
+<span class="mi">2</span>  <span class="mi">2016</span> <span class="mf">236.916</span> <span class="mf">237.111</span> <span class="mf">238.132</span> <span class="mf">239.261</span> <span class="mf">240.236</span> <span class="mf">241.038</span> <span class="mf">240.647</span>
+<span class="mi">3</span>  <span class="mi">2015</span> <span class="mf">233.707</span> <span class="mf">234.722</span> <span class="mf">236.119</span> <span class="mf">236.599</span> <span class="mf">237.805</span> <span class="mf">238.638</span> <span class="mf">238.654</span>
+<span class="mi">4</span>  <span class="mi">2014</span> <span class="mf">233.916</span> <span class="mf">234.781</span> <span class="mf">236.293</span> <span class="mf">237.072</span>   <span class="mf">237.9</span> <span class="mf">238.343</span>  <span class="mf">238.25</span>
+<span class="mi">5</span>  <span class="mi">2013</span>  <span class="mf">230.28</span> <span class="mf">232.166</span> <span class="mf">232.773</span> <span class="mf">232.531</span> <span class="mf">232.945</span> <span class="mf">233.504</span> <span class="mf">233.596</span>
+<span class="mi">6</span>  <span class="mi">2012</span> <span class="mf">226.665</span> <span class="mf">227.663</span> <span class="mf">229.392</span> <span class="mf">230.085</span> <span class="mf">229.815</span> <span class="mf">229.478</span> <span class="mf">229.104</span>
+<span class="mi">7</span>  <span class="mi">2011</span> <span class="mf">220.223</span> <span class="mf">221.309</span> <span class="mf">223.467</span> <span class="mf">224.906</span> <span class="mf">225.964</span> <span class="mf">225.722</span> <span class="mf">225.922</span>
+<span class="mi">8</span>  <span class="mi">2010</span> <span class="mf">216.687</span> <span class="mf">216.741</span> <span class="mf">217.631</span> <span class="mf">218.009</span> <span class="mf">218.178</span> <span class="mf">217.965</span> <span class="mf">218.011</span>
+<span class="mi">9</span>  <span class="mi">2009</span> <span class="mf">211.143</span> <span class="mf">212.193</span> <span class="mf">212.709</span>  <span class="mf">213.24</span> <span class="mf">213.856</span> <span class="mf">215.693</span> <span class="mf">215.351</span>
+<span class="mi">10</span> <span class="mi">2008</span>  <span class="mf">211.08</span> <span class="mf">211.693</span> <span class="mf">213.528</span> <span class="mf">214.823</span> <span class="mf">216.632</span> <span class="mf">218.815</span> <span class="mf">219.964</span>
+<span class="mi">11</span> <span class="mi">2007</span> <span class="mf">202.416</span> <span class="mf">203.499</span> <span class="mf">205.352</span> <span class="mf">206.686</span> <span class="mf">207.949</span> <span class="mf">208.352</span> <span class="mf">208.299</span>
+       <span class="nx">aug</span>     <span class="nx">sep</span>     <span class="nx">oct</span>     <span class="nx">nov</span>     <span class="nx">dec</span>     <span class="nx">ann</span>
+<span class="mi">1</span>  <span class="mf">245.519</span>                                        
+<span class="mi">2</span>  <span class="mf">240.849</span> <span class="mf">241.428</span> <span class="mf">241.729</span> <span class="mf">241.353</span> <span class="mf">241.432</span> <span class="mf">240.011</span>
+<span class="mi">3</span>  <span class="mf">238.316</span> <span class="mf">237.945</span> <span class="mf">237.838</span> <span class="mf">237.336</span> <span class="mf">236.525</span> <span class="mf">237.017</span>
+<span class="mi">4</span>  <span class="mf">237.852</span> <span class="mf">238.031</span> <span class="mf">237.433</span> <span class="mf">236.151</span> <span class="mf">234.812</span> <span class="mf">236.736</span>
+<span class="mi">5</span>  <span class="mf">233.877</span> <span class="mf">234.149</span> <span class="mf">233.546</span> <span class="mf">233.069</span> <span class="mf">233.049</span> <span class="mf">232.957</span>
+<span class="mi">6</span>  <span class="mf">230.379</span> <span class="mf">231.407</span> <span class="mf">231.317</span> <span class="mf">230.221</span> <span class="mf">229.601</span> <span class="mf">229.594</span>
+<span class="mi">7</span>  <span class="mf">226.545</span> <span class="mf">226.889</span> <span class="mf">226.421</span>  <span class="mf">226.23</span> <span class="mf">225.672</span> <span class="mf">224.939</span>
+<span class="mi">8</span>  <span class="mf">218.312</span> <span class="mf">218.439</span> <span class="mf">218.711</span> <span class="mf">218.803</span> <span class="mf">219.179</span> <span class="mf">218.055</span>
+<span class="mi">9</span>  <span class="mf">215.834</span> <span class="mf">215.969</span> <span class="mf">216.177</span>  <span class="mf">216.33</span> <span class="mf">215.949</span> <span class="mf">214.537</span>
+<span class="mi">10</span> <span class="mf">219.086</span> <span class="mf">218.783</span> <span class="mf">216.573</span> <span class="mf">212.425</span> <span class="mf">210.228</span> <span class="mf">215.303</span>
+<span class="mi">11</span> <span class="mf">207.917</span>  <span class="mf">208.49</span> <span class="mf">208.936</span> <span class="mf">210.177</span> <span class="mf">210.036</span> <span class="mf">207.342</span>
+</pre></div>
+
+</code></pre><p>Often <code>readHTMLTable()</code> will be able to identify the header itself,<br>if the HTML is &quot;properly&quot; structured (with a &lt;thead&gt; and &lt;tbody&gt; component).</p>
+<p>Often the page will have multiple tables and we only want one.<br>We can use the <code>which</code> parameter to specify either the table&#39;s number or name (<br>corresponding to the id attribute on the &lt;table&gt; node within the<br>HTML document).</p>
+<pre><code><div class="highlight"><pre><span class="nx">readHTMLTable</span><span class="p">(</span><span class="nx">doc</span><span class="p">,</span> <span class="nx">which</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+</code></pre><h1 id="historical-data-html-forms">Historical Data - HTML Forms</h1>
+<p>Let&#39;s chose a different year and click &quot;Get Historical CPI Data&quot;<br>In the navigation bar, we see the URL</p>
+<pre><code><div class="highlight"><pre><span class="nx">https</span><span class="o">:</span><span class="c1">//www.rateinflation.com/consumer-price-index/usa-historical-cpi?start-year=2002&amp;end-year=2017</span>
+</pre></div>
+
+</code></pre><p>We see the start-year and end-year.<br>This is how we pass the user-specified inputs: separated from the URL via the ?<br>and then in name=value pairs separated by a &amp;</p>
+<p>In R, we don&#39;t need to do this string manipulation,</p>
+<pre><code><div class="highlight"><pre><span class="nx">u</span> <span class="o">=</span> <span class="s2">&quot;https://www.rateinflation.com/consumer-price-index/usa-historical-cpi&quot;</span>
+<span class="nx">tt</span> <span class="o">=</span> <span class="nx">getForm</span><span class="p">(</span><span class="nx">u</span><span class="p">,</span> <span class="s1">&#39;start-year&#39;</span> <span class="o">=</span> <span class="mi">1930</span><span class="p">,</span> <span class="s1">&#39;end-year&#39;</span> <span class="o">=</span> <span class="mi">2017</span><span class="p">)</span>
+<span class="nx">doc</span> <span class="o">=</span> <span class="nx">htmlParse</span><span class="p">(</span><span class="nx">tt</span><span class="p">,</span> <span class="nx">asText</span> <span class="o">=</span> <span class="nx">TRUE</span><span class="p">)</span>
+<span class="nx">tbl</span> <span class="o">=</span> <span class="nx">readHTMLTable</span><span class="p">(</span><span class="nx">doc</span><span class="p">,</span> <span class="nx">which</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">stringsAsFactors</span> <span class="o">=</span> <span class="nx">FALSE</span><span class="p">,</span> <span class="nx">header</span> <span class="o">=</span> <span class="nx">TRUE</span><span class="p">)</span>
+</pre></div>
+
+</code></pre><pre><code><div class="highlight"><pre><span class="nx">head</span><span class="p">(</span><span class="nx">tbl</span><span class="p">)</span>
+</pre></div>
+
+</code></pre></body>
+</html>

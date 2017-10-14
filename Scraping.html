@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scraping.md</title>
+  <link rel="stylesheet" href="OmegaTech.css">
+</head>
+<body>
+<h1 id="scraping-web-pages">Scraping Web Pages</h1>
+<p>The entire purpose of this is automation.</p>
+<p>Web Scraping (with one p, not two) is extracting content<br>from Web pages typically designed for humans to view.<br>The information is usually semi-structured, and we want to extract<br>it into structured data.</p>
+<p>Because the pages are intended for humans, the layout is important, somewhat arbitrary and adds a<br>complex layer over the data we want.  The layout can be achieved in many different ways to create<br>the appearance. This makes it hard to find the information we want. Furthermore, it can readily<br>change as people change the appearance of the page(s) without changing the content!</p>
+<p>Web scraping  involves finding patterns in the layout to identify the data we want.<br>This is not really useful if each page has the data in a different pattern and so we<br>have to write an extractor for each page.</p>
+<h1 id="web-services-apis">Web Services &amp; APIs</h1>
+<p>Web APIs (Application Programming Interfaces) and Web Services<br>provide structured ways to get data that is not  intended<br>for humans to view in a browser. So we get back the data directly.</p>
+<p>Web services use the Web to make requests and send the results back -<br>Request and Response.</p>
+<p>We use HTTP(S) since it is so ubiquitous and it allows us to send<br>arbitrary data back and forth in the requests and responses (e.g.<br>text, images, video, ..., anything).</p>
+<p>We use HTTP even to communicate between programs/applications on our own machine,<br>e.g. certain databases.</p>
+<p>This is why it is so valuable to know how to make HTTP requests.</p>
+<p>After one understands the ideas behind APIs,<br>they are much better than scraping data from HTML pages.<br>They are intended for programmatic extraction; HTML pages are not.</p>
+<p>APIs also allow for authenticated access.</p>
+<h1 id="rules-restrictions-for-scraping">Rules/Restrictions for Scraping</h1>
+<ol>
+<li>Most sites have Terms of Service (ToS) that<br>prohibit you from scraping data.</li>
+<li>Most also will limit the number of requests you make.</li>
+<li>Some will detect you are scraping and deny you access for<br>a period, or forever.</li>
+<li>You typically cannot scrape data and make it available to others.</li>
+</ol>
+<p>Check the ToS before you do someting illegal.</p>
+<h1 id="other-alternatives">Other Alternatives</h1>
+<p>Before you start scraping, see if there are better, easier ways<br>to get the data.</p>
+<ol>
+<li>See if it is available for bulk download rather than individual record-at-a-time requests.</li>
+<li>Ask the owneres if they can give it to you.  (This will avoid burdening their servers.)</li>
+<li>See if thre is an API for the data, and perhaps an existing package to access it.</li>
+<li>Verify that the data are what you really want.</li>
+</ol>
+</body>
+</html>
